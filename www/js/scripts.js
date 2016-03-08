@@ -5,6 +5,7 @@
 		var nome_categoria = "";
 		var resultados_busca = 0;
 		var resultados = [];
+		var categorias = [];
 		
 		 // alert dialog dismissed
 		function alertDismissed() {
@@ -22,7 +23,11 @@
 		
 		function TrocarCategoria(codigo_informado){
 			codigo_categoria = codigo_informado;
-			nome_categoria = "* TESTE * ";
+			for (var index=0; index<categorias.length; index++ ) {
+				if (categorias[index].codigo == codigo_informado ) {
+					nome_categoria =categorias[index].nome;
+				}
+			}
 			$.mobile.changePage("#tela3", { transition: "slideup"} );
 			
 		}
@@ -506,9 +511,14 @@
 						var codigo = $(this).find("codigo").text();
 						var nome = $(this).find("descricao").text();
 						
+						categorias.push({
+                        codigo: $(this).find("codigo").text(),
+                        nome: $(this).find("descricao").text()
+						});    
+						
 						conteudo = conteudo + '<li>';
-						conteudo = conteudo + '<a href="#" onclick="TrocarCategoria(' + codigo +')">';
-						conteudo = conteudo + '<img src="img/smico4.png" height="20">';
+						conteudo = conteudo + '<a href="#" onclick=TrocarCategoria(' + codigo + ')>';
+						conteudo = conteudo + '<img src="img/icon_categoria.png" style="top:15px;left:20px;">';
 						conteudo = conteudo + '<h2>' + nome + '</h2>';
 						conteudo = conteudo + '</a>';
 						conteudo = conteudo + '</li>';
