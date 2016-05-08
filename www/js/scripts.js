@@ -296,6 +296,20 @@
 			isConnected = false;
 		}
 		
+		function ValidarNavegacao(){
+			if (isPhoneGapReady){
+				if (isConnected) {
+					//Continuar
+				} else {
+					navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Versatille', 'OK');
+					$.mobile.changePage("#main");
+				}
+			} else {
+				navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Versatille', 'OK');
+				$.mobile.changePage("#main");
+			}
+		}
+		
 		//Para as acoes do carrinho (excluir - alterar)
 		$(document).on('pageshow', '#acao', function(){  
 			$.mobile.changePage("#carrinho");
@@ -335,7 +349,10 @@
 		});	
 		
 		$(document).on('pageinit', '#faleconosco', function(){  
-        $(document).on('click', '#enviar_contato', function() { // catch the form's submit event
+        $(document).on('click', '#enviar_contato', function() { 
+			// catch the form's submit event
+			
+			ValidarNavegacao();
 		
 			var field_tag_css = {
 				"background-color": "#FFFF99"
@@ -413,53 +430,67 @@
 		});
 		
 		$(document).on('pageshow', '#main', function(){
-			$.ajax({
-				type: "GET",
-				url: "http://www.useversatille.com.br/xml/xml_banners.php",
-				dataType: "xml",
-				success: function(data) {
-					var conteudo = "";
-					$(data).find('banners').each(function(){
-						var link = $(this).find("link").text();
-						var imagem = $(this).find("imagem").text();
-						imagem = 'http://www.useversatille.com.br/' + imagem;
+			
+			var ver_banner = true;
+			if (isPhoneGapReady){
+				if (isConnected) {
+					//Continuar
+				} else {
+					ver_banner = false;
+				}				
+			} else {
+				ver_banner = false;
+			}
+			
+			if (ver_banner){
+				$.ajax({
+					type: "GET",
+					url: "http://www.useversatille.com.br/xml/xml_banners.php",
+					dataType: "xml",
+					success: function(data) {
+						var conteudo = "";
+						$(data).find('banners').each(function(){
+							var link = $(this).find("link").text();
+							var imagem = $(this).find("imagem").text();
+							imagem = 'http://www.useversatille.com.br/' + imagem;
+							
+							conteudo = conteudo + '<div class="item">';
+							if (link != "") {
+								conteudo = conteudo + '<a href="http://www.useversatille.com.br/' + link + '">';
+							}
+						   
+							conteudo = conteudo + '<img src="' + imagem + '">';
+							if (link != "") {
+								conteudo = conteudo + '</a>';
+							}
+							conteudo = conteudo + '</div>';
+						});
 						
-						conteudo = conteudo + '<div class="item">';
-                        if (link != "") {
-							conteudo = conteudo + '<a href="http://www.useversatille.com.br/' + link + '">';
-                        }
-                       
-                        conteudo = conteudo + '<img src="' + imagem + '">';
-					    if (link != "") {
-						    conteudo = conteudo + '</a>';
-                        }
-						conteudo = conteudo + '</div>';
-					});
-					
-					$("#owl-demo").html(conteudo);
-					
-					$("#owl-demo").owlCarousel({
+						$("#owl-demo").html(conteudo);
+						
+						$("#owl-demo").owlCarousel({
 
-						navigation : true,
-						slideSpeed : 300,
-						paginationSpeed : 600,
-						singleItem : true,
-						autoPlay: true,
-						lazyLoad : true,
-						transitionStyle : "backSlide",
-						itemsMobile : true,
-						itemsDesktopSmall : true
-					});
-				},
-				error: function (request,error) {
-					// This callback function will trigger on unsuccessful action                
-					//navigator.notification.alert('Houve um erro ao buscar os banners no sistema!', alertDismissed, 'Versatille', 'OK');
-				}
-			});
+							navigation : true,
+							slideSpeed : 300,
+							paginationSpeed : 600,
+							singleItem : true,
+							autoPlay: true,
+							lazyLoad : true,
+							transitionStyle : "backSlide",
+							itemsMobile : true,
+							itemsDesktopSmall : true
+						});
+					},
+					error: function (request,error) {
+						// This callback function will trigger on unsuccessful action                
+						//navigator.notification.alert('Houve um erro ao buscar os banners no sistema!', alertDismissed, 'Versatille', 'OK');
+					}
+				});
+			}
 		});
 		
 		$(document).on('pageinit', '#tela1', function(){  
-			
+			ValidarNavegacao();
 			
 			$.ajax({
 				type: "GET",
@@ -499,7 +530,8 @@
 			});
 		});		
 			
-		$(document).on('pageshow', '#tela2', function(){  
+		$(document).on('pageshow', '#tela2', function(){ 
+			ValidarNavegacao();
 			$('#loader_categorias').show();
 			$.ajax({
 				type: "GET",
@@ -535,6 +567,7 @@
 		});	
 		
 		$(document).on('pageshow', '#tela3', function(){  
+			ValidarNavegacao();
 			$.ajax({
 				type: "GET",
 				url: "http://www.useversatille.com.br/xml/xml_produtos.php?categoria=" + codigo_categoria,
@@ -593,6 +626,7 @@
 		});	
 		
 		$(document).on('pageshow', '#tela4', function(){ 
+			ValidarNavegacao();
 			$("#main_tela4").html('<img src="img/ajax-loader.gif">');
 			//Produto Selecionado
 			$.ajax({
@@ -676,6 +710,7 @@
 		});	
 						
 		$(document).on('pageshow', '#tela11', function(){
+			ValidarNavegacao();
 			//https://github.com/commadelimited/autoComplete.js
 			$("#searchField").autocomplete({
 				icon: 'arrow-r',
@@ -691,7 +726,8 @@
 		});
 		
 		
-		$(document).on('pageshow', '#carrinho', function(){ 
+		$(document).on('pageshow', '#carrinho', function(){
+			ValidarNavegacao();			
 			$("#main_carrinho").html('');
 			
 			$.ajax({
