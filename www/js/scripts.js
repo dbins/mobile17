@@ -262,7 +262,7 @@
 		function onDeviceReady() {
 			isPhoneGapReady = true;
 			// detect for network access
-			networkDetection();
+			//networkDetection();
 			// attach events for online and offline detection
 			document.addEventListener("online", onOnline, false);
 			document.addEventListener("offline", onOffline, false);
@@ -328,9 +328,11 @@
 					$(data).find('noticia').each(function(){
 						var titulo =  $(this).find("titulo").text();
 						var descricao =  $(this).find("descricao").text();
+						var imagem =  $(this).find("thumb").text();
 						
 						conteudo = conteudo + '<div data-role="collapsible">';
-						conteudo = conteudo + '<h3>' + titulo + '</h3>';
+						conteudo = conteudo + '<h2>' + titulo + '</h2>';
+						conteudo = conteudo + '<p>><img src="http://www.useversatille.com.br/' + imagem + '"></p>';
 						conteudo = conteudo + '<p>' + descricao + '</p>';
 						conteudo = conteudo + '</div>';
 						
@@ -529,10 +531,11 @@
 				}
 			});
 		});		
-			
-		$(document).on('pageshow', '#tela2', function(){ 
+		
+		//Desatualizado	
+		$(document).on('pageshow', '#tela2_original', function(){ 
 			ValidarNavegacao();
-			$('#loader_categorias').show();
+			$('#loader_categorias_original').show();
 			$.ajax({
 				type: "GET",
 				url: "http://www.useversatille.com.br/xml/xml_categorias.php",
@@ -555,16 +558,64 @@
 						conteudo = conteudo + '</a>';
 						conteudo = conteudo + '</li>';
 					});
-					$('#loader_categorias').hide();
-					$('#lista_categorias').append(conteudo);
-					$('#lista_categorias').trigger('create');    
-					$('#lista_categorias').listview('refresh');
+					$('#loader_categorias_original').hide();
+					$('#lista_categorias_original').append(conteudo);
+					$('#lista_categorias_original').trigger('create');    
+					$('#lista_categorias_original').listview('refresh');
 
 				}
 			});
 			
 			
 		});	
+		
+		
+		$(document).on('pageshow', '#tela2', function(){ 
+			ValidarNavegacao();
+			$('#loader_categorias').show();
+			$.ajax({
+				type: "GET",
+				url: "http://www.useversatille.com.br/xml/xml_categorias.php",
+				dataType: "xml",
+				success: function(data) {
+					var conteudo = "";
+					var tmp_nome_categoria = '';
+					var tmp_contador  = 1;
+					$(data).find('categoria').each(function(){
+						var codigo = $(this).find("codigo").text();
+						var nome = $(this).find("descricao").text();
+						var categoria = $(this).find("observacao").text();
+						var imagem = $(this).find("imagem").text();
+						
+						categorias.push({
+                        codigo: $(this).find("codigo").text(),
+                        nome: $(this).find("descricao").text()
+						});    
+						
+						
+						if (tmp_contador == 1){
+							conteudo = conteudo + '<h3>' + categoria + '</h3>';
+						} else {
+							if (tmp_nome_categoria != categoria){
+								conteudo = conteudo + '<h3>' + categoria + '</h3>';
+							}
+						}
+						
+						conteudo = conteudo + '<div style="display: inline-block;">';
+						conteudo = conteudo + '<a href="#" onclick="TrocarCategoria(' + codigo + ')" data-role="button" style="text-decoration:none"><img src="http://www.useversatille.com.br/thumbs/' + imagem + '">';
+						conteudo = conteudo + '<p align="center"><strong>' + nome + '</strong></p></a>';
+						conteudo = conteudo + '</div>';
+						
+						tmp_nome_categoria = categoria;
+						tmp_contador++;
+						
+					});
+					$('#loader_categorias').hide();
+					$('#lista_categorias').append(conteudo);
+
+				}
+			});
+		});
 		
 		$(document).on('pageshow', '#tela3', function(){  
 			ValidarNavegacao();
@@ -667,7 +718,7 @@
 						conteudo = conteudo + '	</div>';
 						conteudo = conteudo + '</div>';
 						
-						conteudo = conteudo + '<p><a href="#" onclick="Comprar(' + codigo +' )">* Adicionar Produto *</a></p>';
+						//conteudo = conteudo + '<p><a href="#" onclick="Comprar(' + codigo +' )">* Adicionar Produto *</a></p>';
 						
 						//Carregando a galeria de imagens
 						$(data).find('foto').each(function(){
@@ -709,7 +760,7 @@
 			});
 		});	
 						
-		$(document).on('pageshow', '#tela11', function(){
+		$(document).on('pageshow', '#tela11_original', function(){
 			ValidarNavegacao();
 			//https://github.com/commadelimited/autoComplete.js
 			$("#searchField").autocomplete({
@@ -721,6 +772,44 @@
 				callback: function(e){
                     var $a = $(e.currentTarget); // access the selected item
 					TrocarCodigo($a.attr('href').substr(4));
+				}
+			});
+		});
+		
+		$(document).on('pageshow', '#tela11', function(){
+			ValidarNavegacao();
+			 $( "#autocomplete" ).on( "listviewbeforefilter", function ( e, data ) {
+				var $ul = $( this ),
+					$input = $( data.input ),
+					value = $input.val(),
+					html = "";
+				$ul.html( "" );
+				if ( value && value.length > 2 ) {
+					$ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
+					$ul.listview( "refresh" );
+					$.ajax({
+						url: "http://www.useversatille.com.br/xml/json_produtos_busca2.php",
+						async: 'true',
+						dataType: 'json',
+						data: {
+							term: $input.val()
+						},
+						success: function(data) {
+							$.each( data, function ( i, val ) {
+								//html += "<li>" + val.label + "</li>";
+								html += '<li>	<a id = "' + val.value + '" data-parm="' + val.value + '" href="#" onclick="TrocarCodigo('+ val.value +')">';
+								html += '<img src="http://www.useversatille.com.br/thumbs/' + val.icon + '">';
+								html += '<h2>' + val.label + '</h2></a>';
+								html += '</li>';
+							});
+							$ul.html( html );
+							$ul.listview( "refresh" );
+							$ul.trigger( "updatelayout");	
+						},
+						error: function (request,error) {
+							//navigator.notification.alert('Houve um erro ao buscar as informações deste produto!', alertDismissed, Versatille', 'OK');
+						}
+					});
 				}
 			});
 		});
