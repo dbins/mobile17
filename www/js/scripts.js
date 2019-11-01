@@ -80,7 +80,7 @@
 		//Funcoes do carrinho de compras
 		function Finalizar(){
 			
-			$.ajax({url: 'http://www.useversatille.com.br/xml/ajax_finaliza_pedido.php',
+			$.ajax({url: 'http://useversatille.hospedagemdesites.ws/xml/ajax_finaliza_pedido.php',
 			data: {CPF : '44444444444'},
 			type: 'post',                   
 			async: 'true',
@@ -127,7 +127,7 @@
 		
 		function Remover(tmp_codigo){
 			
-			$.ajax({url: 'http://www.useversatille.com.br/xml/ajax_carrinho_remover.php',
+			$.ajax({url: 'http://useversatille.hospedagemdesites.ws/xml/ajax_carrinho_remover.php',
 			data: {id : tmp_codigo},
 			type: 'post',                   
 			async: 'true',
@@ -166,7 +166,7 @@
 		
 		function Comprar(tmp_codigo){
 			
-			$.ajax({url: 'http://www.useversatille.com.br/xml/ajax_carrinho_comprar.php',
+			$.ajax({url: 'http://useversatille.hospedagemdesites.ws/xml/ajax_carrinho_comprar.php',
 			data: {id_prod : tmp_codigo, CPF: '44444444444'},
 			type: 'post',                   
 			async: 'true',
@@ -211,7 +211,7 @@
 		
 		function Alterar(codigo_id, var_pro_cod, var_qtde){
 			
-			$.ajax({url: 'http://www.useversatille.com.br/xml/ajax_carrinho_alterar.php',
+			$.ajax({url: 'http://useversatille.hospedagemdesites.ws/xml/ajax_carrinho_alterar.php',
 			data: {id : codigo_id, pro_cod : var_pro_cod, qtde: var_qtde},
 			type: 'post',                   
 			async: 'true',
@@ -293,7 +293,7 @@
 			isConnected = true;
 		}
 		function onOffline() {
-			isConnected = false;
+			isConnected = true;
 		}
 		
 		function ValidarNavegacao(){
@@ -321,7 +321,7 @@
 			//Noticias
 			$.ajax({
 				type: "GET",
-				url: "http://www.useversatille.com.br/xml/xml_noticias2.php",
+				url: "http://useversatille.hospedagemdesites.ws/xml/xml_noticias2.php",
 				dataType: "xml",
 				success: function(data) {
 					var conteudo = "";
@@ -332,7 +332,7 @@
 						
 						conteudo = conteudo + '<div data-role="collapsible">';
 						conteudo = conteudo + '<h2>' + titulo + '</h2>';
-						conteudo = conteudo + '<p>><img src="http://www.useversatille.com.br/' + imagem + '"></p>';
+						conteudo = conteudo + '<p>><img src="http://useversatille.hospedagemdesites.ws/' + imagem + '"></p>';
 						conteudo = conteudo + '<p>' + descricao + '</p>';
 						conteudo = conteudo + '</div>';
 						
@@ -391,7 +391,7 @@
 				// Send data to server through the ajax call
 				// action is functionality we want to call and outputJSON is our data
 				//formData : $('#check-contato').serialize()
-					$.ajax({url: 'http://www.useversatille.com.br/xml/ajax_contato.php',
+					$.ajax({url: 'http://useversatille.hospedagemdesites.ws/xml/ajax_contato.php',
 						data: {action : 'enviar', nome: $('#nome_contato').val(), email: $('#email_contato').val(), ddd_telefone: '00', numero_telefone: '00000000', mensagem: $('#mensagem_contato').val()},
 						type: 'post',                   
 						async: 'true',
@@ -447,18 +447,18 @@
 			if (ver_banner){
 				$.ajax({
 					type: "GET",
-					url: "http://www.useversatille.com.br/xml/xml_banners.php",
+					url: "http://useversatille.hospedagemdesites.ws/xml/xml_banners.php",
 					dataType: "xml",
 					success: function(data) {
 						var conteudo = "";
 						$(data).find('banners').each(function(){
 							var link = $(this).find("link").text();
 							var imagem = $(this).find("imagem").text();
-							imagem = 'http://www.useversatille.com.br/' + imagem;
+							imagem = 'http://useversatille.hospedagemdesites.ws/' + imagem;
 							
 							conteudo = conteudo + '<div class="item">';
 							if (link != "") {
-								conteudo = conteudo + '<a href="http://www.useversatille.com.br/' + link + '">';
+								conteudo = conteudo + '<a href="http://useversatille.hospedagemdesites.ws/' + link + '">';
 							}
 						   
 							conteudo = conteudo + '<img src="' + imagem + '">';
@@ -496,7 +496,7 @@
 			
 			$.ajax({
 				type: "GET",
-				url: "http://www.useversatille.com.br/xml/xml_produtos_novidades.php",
+				url: "http://useversatille.hospedagemdesites.ws/xml/xml_produtos_novidades.php",
 				dataType: "xml",
 				success: function(data) {
 					var conteudo = "<h2>Novidades!</h2>";
@@ -507,7 +507,7 @@
 						var nome = $(this).find("pro_descricao").text();
 						var valor = $(this).find("pro_valor").text();
 						var valor_promo = $(this).find("pro_valor_promocao").text();
-						imagem = 'http://www.useversatille.com.br/' + imagem;
+						imagem = 'http://useversatille.hospedagemdesites.ws/' + imagem;
 					
 						conteudo = conteudo + '<div class="produtos">';
 						conteudo = conteudo + '<div class="produtos-images">';
@@ -538,7 +538,7 @@
 			$('#loader_categorias_original').show();
 			$.ajax({
 				type: "GET",
-				url: "http://www.useversatille.com.br/xml/xml_categorias.php",
+				url: "http://useversatille.hospedagemdesites.ws/xml/xml_categorias.php",
 				dataType: "xml",
 				success: function(data) {
 					var conteudo = "";
@@ -575,7 +575,7 @@
 			$('#loader_categorias').show();
 			$.ajax({
 				type: "GET",
-				url: "http://www.useversatille.com.br/xml/xml_categorias.php",
+				url: "http://useversatille.hospedagemdesites.ws/xml/xml_categorias.php",
 				dataType: "xml",
 				success: function(data) {
 					var conteudo = "";
@@ -602,7 +602,7 @@
 						}
 						
 						conteudo = conteudo + '<div style="display: inline-block;">';
-						conteudo = conteudo + '<a href="#" onclick="TrocarCategoria(' + codigo + ')" data-role="button" style="text-decoration:none"><img src="http://www.useversatille.com.br/thumbs/' + imagem + '">';
+						conteudo = conteudo + '<a href="#" onclick="TrocarCategoria(' + codigo + ')" data-role="button" style="text-decoration:none"><img src="http://useversatille.hospedagemdesites.ws/thumbs/' + imagem + '">';
 						conteudo = conteudo + '<p align="center"><strong>' + nome + '</strong></p></a>';
 						conteudo = conteudo + '</div>';
 						
@@ -621,7 +621,7 @@
 			ValidarNavegacao();
 			$.ajax({
 				type: "GET",
-				url: "http://www.useversatille.com.br/xml/xml_produtos.php?categoria=" + codigo_categoria,
+				url: "http://useversatille.hospedagemdesites.ws/xml/xml_produtos.php?categoria=" + codigo_categoria,
 				dataType: "xml",
 				success: function(data) {
 				
@@ -643,7 +643,7 @@
 						valor_promo: $(this).find("pro_valor_promocao").text()
 						});    
 						
-						imagem = 'http://www.useversatille.com.br/' + imagem;
+						imagem = 'http://useversatille.hospedagemdesites.ws/' + imagem;
 					
 						conteudo = conteudo + '<div class="produtos">';
 						conteudo = conteudo + '<div class="produtos-images">';
@@ -682,7 +682,7 @@
 			//Produto Selecionado
 			$.ajax({
 				type: "GET",
-				url: "http://www.useversatille.com.br/xml/xml_produtos_detalhe.php?codigo=" + codigo_produto,
+				url: "http://useversatille.hospedagemdesites.ws/xml/xml_produtos_detalhe.php?codigo=" + codigo_produto,
 				dataType: "xml",
 				success: function(data) {
 					var conteudo_fotos = "";
@@ -695,7 +695,7 @@
 						var valor = $(this).find("pro_valor").text();
 						var valor_promo = $(this).find("pro_valor_promocao").text();
 						var detalhes = $(this).find("pro_espec").text();
-						imagem = 'http://www.useversatille.com.br/' + imagem;
+						imagem = 'http://useversatille.hospedagemdesites.ws/' + imagem;
 											
 						conteudo = conteudo + '<section class="prodtotal">';    
 						conteudo = conteudo + '<div id="imgprod"><img src="' + imagem + '" class="img"></a></div>';
@@ -723,7 +723,7 @@
 						//Carregando a galeria de imagens
 						$(data).find('foto').each(function(){
 							var imagem = $(this).find("thumb").text();
-							imagem = 'http://www.useversatille.com.br/' + imagem;
+							imagem = 'http://useversatille.hospedagemdesites.ws/' + imagem;
 							conteudo_fotos = conteudo_fotos + '<div class="item">';
                             conteudo_fotos = conteudo_fotos + '<img src="' + imagem + '">';
 							conteudo_fotos = conteudo_fotos + '</div>';
@@ -766,7 +766,7 @@
 			$("#searchField").autocomplete({
 				icon: 'arrow-r',
 				target: $('#suggestions'),
-				source: 'http://www.useversatille.com.br/xml/json_produtos_busca.php',
+				source: 'http://useversatille.hospedagemdesites.ws/xml/json_produtos_busca.php',
 				minLength: 3,
 				loadingHtml : '<li data-icon="none"><a href="#">Pesquisando...</a></li>',
 				callback: function(e){
@@ -788,7 +788,7 @@
 					$ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
 					$ul.listview( "refresh" );
 					$.ajax({
-						url: "http://www.useversatille.com.br/xml/json_produtos_busca2.php",
+						url: "http://useversatille.hospedagemdesites.ws/xml/json_produtos_busca2.php",
 						async: 'true',
 						dataType: 'json',
 						data: {
@@ -798,7 +798,7 @@
 							$.each( data, function ( i, val ) {
 								//html += "<li>" + val.label + "</li>";
 								html += '<li>	<a id = "' + val.value + '" data-parm="' + val.value + '" href="#" onclick="TrocarCodigo('+ val.value +')">';
-								html += '<img src="http://www.useversatille.com.br/thumbs/' + val.icon + '">';
+								html += '<img src="http://useversatille.hospedagemdesites.ws/thumbs/' + val.icon + '">';
 								html += '<h2>' + val.label + '</h2></a>';
 								html += '</li>';
 							});
@@ -821,7 +821,7 @@
 			
 			$.ajax({
 				type: "GET",
-				url: "http://www.useversatille.com.br/xml/xml_carrinho.php?CPF=44444444444",
+				url: "http://useversatille.hospedagemdesites.ws/xml/xml_carrinho.php?CPF=44444444444",
 				dataType: "xml",
 				success: function(data) {
 					
@@ -845,7 +845,7 @@
 						var quantidade = $(this).find("quantidade").text();
 						var total = $(this).find("total").text();
 						var id_carrinho = $(this).find("id_carrinho").text();
-						imagem = 'http://www.useversatille.com.br/' + imagem;
+						imagem = 'http://useversatille.hospedagemdesites.ws/' + imagem;
 						
 						conteudo = conteudo + '<tr>';
 						conteudo = conteudo + '<td><a href="#"  data-role="button" data-icon="delete" data-iconpos="notext" onclick="Remover(' + id_carrinho + ')">Excluir</a></td>';
